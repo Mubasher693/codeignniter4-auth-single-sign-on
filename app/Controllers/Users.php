@@ -181,13 +181,11 @@ class Users extends Authorization{
                     }
                     $this->crop(FCPATH.$path.$name.'.'.$file_type, FCPATH.$path. 'icon/'.$name.'.'.$file_type, 34, 34 );
                     $user_data['icon_path']= $path_icon;
-
-                    $session_array['userData'] = [
+                    session()->push('userData', [
                         'icon_path'         => $path_icon,
                         'thumbnail_path'    => $path_thumbnail,
                         'profile_image'     => $name.'.'.$file_type,
-                    ];
-                    session()->set($session_array);
+                    ]);
                 }
                 if($update_password){
                     $user_data['password']          = password_hash($password, 1);
