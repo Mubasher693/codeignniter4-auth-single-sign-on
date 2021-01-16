@@ -149,6 +149,10 @@ class Auth extends BaseController
                     return redirect()->back()->withInput();
                 }
             }else {
+                $response       = $this->facebook_auth();
+                if(is_array($response)){
+                    $data['fb_login_button'] = $response[1];
+                }
                 $gAuth          = config('Gmail');
                 $google_client  = new \Google_Client();
                 $data['form']   = 'auth/login';
@@ -195,7 +199,7 @@ class Auth extends BaseController
                     $login_button = '<a href="'.$google_client->createAuthUrl().'" class="btn btn-block btn-danger">
                                         <i class="fab fa-google-plus mr-2"></i> Sign in using Google
                                         </a>';
-                    $data['login_button'] = $login_button;
+                    $data['gm_login_button'] = $login_button;
                 }else{
                     if($user_account){
                         return redirect()->to(base_url().'/user');
@@ -293,6 +297,7 @@ class Auth extends BaseController
 
     public function facebook_auth(){
         try{
+
             $config_fb = config('Facebook');
             $fb = new Facebook([
                 'app_id'                => $config_fb->app_id,
@@ -309,25 +314,22 @@ class Auth extends BaseController
                 }
             } catch(FacebookResponseException $e) {
                 // When Graph returns an error
-                echo 'Graph returned an error: ' . $e->getMessage();
-                exit;
+                return [$e->getCode() ,'Graph returned an error: ' . $e->getMessage()];
             } catch(FacebookSDKException $e) {
                 // When validation fails or other local issues
-                echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                exit;
+                return [$e->getCode() ,'Facebook SDK returned an error: ' . $e->getMessage()];
             }
             if (isset($accessToken)) {
-
                 if (isset($_SESSION['facebook_access_token'])) {
                     $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
                 } else {
                     // getting short-lived access token
-                    $_SESSION['facebook_access_token'] = (string) $accessToken;
+                    $this->session->set('facebook_access_token', (string) $accessToken);
                     // OAuth 2.0 client handler
                     $oAuth2Client = $fb->getOAuth2Client();
                     // Exchanges a short-lived access token for a long-lived one
                     $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
-                    $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
+                    $this->session->set('facebook_access_token', (string) $longLivedAccessToken);
                     // setting default access token to be used in script
                     $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
                 }
@@ -352,23 +354,25 @@ class Auth extends BaseController
                     $_SESSION['fb_pic'] = $fbpic.'</br>';
                 } catch(FacebookResponseException $e) {
                     // When Graph returns an error
-                    echo 'Graph returned an error: ' . $e->getMessage();
                     session_destroy();
                     // redirecting user back to app login page
                     header("Location: ./");
-                    exit;
+                    return [$e->getCode() ,'Graph returned an error: ' . $e->getMessage()];
                 } catch(FacebookSDKException $e) {
                     // When validation fails or other local issues
-                    echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                    exit;
+                    return [$e->getCode() ,'Facebook SDK returned an error: ' . $e->getMessage()];
                 }
             } else {
                 // replace your website URL same as added in the developers.Facebook.com/apps e.g. if you used http instead of https and you used
                 $loginUrl = $helper->getLoginUrl('https://phpstack-21306-56790-161818.cloudwaysapps.com', $permissions);
-                echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
+                /*$button = '<a href="' . $loginUrl . '">Log in with Facebook!</a>';*/
+                $button = '<a href="'.$loginUrl.'" class="btn btn-block btn-primary">
+                            <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+                           </a>';
+                return array(200,$button);
             }
         }catch (\Exception $e){
-
+            return [$e->getCode() , $e->getMessage()];
         }
     }
 }
