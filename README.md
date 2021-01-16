@@ -11,6 +11,9 @@ CodeIgniter 4 is used as a framework with
         public $default_graph_version='v2.5';
         public $app_id    = 'your app id';
         public $app_secret= 'your app secret';
+        // Replace your website URL same as added in the developers.Facebook.com/apps e.g. 
+        // if you used http instead of https and you used
+        public $app_url     = 'http://dummy.com/';
       }
   - Gmail (Create class with below mentioned public variable and assign them values.)
     - Follow this [link](https://www.webslesson.info/2019/09/how-to-make-login-with-google-account-using-php.html) to create Google console app.

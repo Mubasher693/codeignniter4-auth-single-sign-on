@@ -28,12 +28,12 @@ class Auth extends BaseController
     /**
      * @return \CodeIgniter\HTTP\RedirectResponse|string|void
      */
-	public function index(){
+    public function index(){
         $data = [
             'pageTitle' => 'Register',
             'validation' => \Config\Services::validation()
         ];
-	    try{
+        try{
             if ($this->request->getMethod() === 'post') {
                 $validate = [
                     'username' => [
@@ -93,9 +93,9 @@ class Auth extends BaseController
                 return view('auth/register', $data);
             }
         }catch (\Exception $e){
-	        print_r($e);
+            print_r($e);
         }
-	}
+    }
 
     /**
      * @return \CodeIgniter\HTTP\RedirectResponse|string|void
@@ -297,7 +297,6 @@ class Auth extends BaseController
 
     public function facebook_auth(){
         try{
-
             $config_fb = config('Facebook');
             $fb = new Facebook([
                 'app_id'                => $config_fb->app_id,
@@ -364,7 +363,7 @@ class Auth extends BaseController
                 }
             } else {
                 // replace your website URL same as added in the developers.Facebook.com/apps e.g. if you used http instead of https and you used
-                $loginUrl = $helper->getLoginUrl('https://phpstack-21306-56790-161818.cloudwaysapps.com', $permissions);
+                $loginUrl = $helper->getLoginUrl($config_fb->app_url, $permissions);
                 /*$button = '<a href="' . $loginUrl . '">Log in with Facebook!</a>';*/
                 $button = '<a href="'.$loginUrl.'" class="btn btn-block btn-primary">
                             <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
