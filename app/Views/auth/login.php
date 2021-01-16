@@ -46,21 +46,21 @@
 
                 <div class="social-auth-links text-center mt-2 mb-3">
                     <!--Facebook-->
-                    <?php if($fb_login_button){ ?>
+                    <?php if($fb_login_button != ''){
+                        echo $fb_login_button;
+                    } else { ?>
                         <a href="#" class="btn btn-block btn-primary">
                             <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
                         </a>
-                    <?php } else {
-                        echo $fb_login_button;
-                    } ?>
+                    <?php } ?>
                     <!--Gmail-->
-                    <?php if($fb_login_button){ ?>
+                    <?php if($gm_login_button != '') {
+                        echo $gm_login_button;
+                    } else { ?>
                         <a href="#" class="btn btn-block btn-danger">
                             <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
                         </a>
-                    <?php } else {
-                        echo  $gm_login_button;
-                    } ?>
+                    <?php } ?>
                 </div>
                 <!-- /.social-auth-links -->
 
