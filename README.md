@@ -3,6 +3,15 @@ CodeIgniter 4 is used as a framework with
 - Basic User Authentication
 - Single Sign On
   - Facebook
+    - Follow this [link](https://www.cloudways.com/blog/add-facebook-login-in-php/) to create Facebook console app.
+      ```
+      namespace Config;
+      use CodeIgniter\Config\BaseConfig;
+      class Facebook extends BaseConfig{
+        public $default_graph_version='v2.5';
+        public $app_id    = 'your app id';
+        public $app_secret= 'your app secret';
+      }
   - Gmail (Create class with below mentioned public variable and assign them values.)
     - Follow this [link](https://www.webslesson.info/2019/09/how-to-make-login-with-google-account-using-php.html) to create Google console app.
       ```
@@ -15,12 +24,17 @@ CodeIgniter 4 is used as a framework with
         public $ClientSecret = ''; 
       }
       ```
-
-## Database
-- Please create database (codeigniter4) and then run migration command
-  - php spark migrate
-- Run the project using command
-  - php spark serve
+      
+## Run a project
+  - Database
+    - codeigniter4 
+  - Migration
+    - php spark migrate
+  - Install vendors/packages
+    - php composer.phar install (for a local composer) 
+    - php composer install (for global composer) 
+  - Run the project using command
+    - php spark serve
   
 ## Server Requirements
 PHP version 7.2 or higher is required, with the following extensions installed: 
